@@ -9,6 +9,11 @@ import (
 	"fmt"
 )
 
+type Result struct {
+	Num int
+	Res string
+}
+
 func init() {
 	lineScanner = bufio.NewScanner(os.Stdin)
 	wordScanner = bufio.NewScanner(strings.NewReader(""))
