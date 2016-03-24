@@ -31,7 +31,11 @@ func Printf(format string, a ... interface{}) {
 		fmt.Fprintf(writer, format, a ...)
 	}
 }
-func Close() {
+func Close(results []string) {
+	for i, res := range results {
+		Printf("Case #%d: %s\n", i + 1, res)
+	}
+
 	if writer != nil {
 		writer.Flush()
 	}
