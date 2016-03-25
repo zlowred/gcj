@@ -2,11 +2,13 @@ package gcj
 
 import (
 	"bufio"
-	"strings"
-	"os"
-	"strconv"
 	"errors"
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
+
+	"github.com/pmezard/go-difflib/difflib"
 )
 
 type Result struct {
@@ -25,15 +27,15 @@ var wordScanner *bufio.Scanner
 
 var writer *bufio.Writer
 
-func Printf(format string, a ... interface{}) {
-	fmt.Printf(format, a ...)
+func Printf(format string, a ...interface{}) {
+	fmt.Printf(format, a...)
 	if writer != nil {
-		fmt.Fprintf(writer, format, a ...)
+		fmt.Fprintf(writer, format, a...)
 	}
 }
 func Close(results []string) {
 	for i, res := range results {
-		Printf("Case #%d: %s\n", i + 1, res)
+		Printf("Case #%d: %s\n", i+1, res)
 	}
 
 	if writer != nil {
@@ -41,12 +43,40 @@ func Close(results []string) {
 	}
 }
 
+func SetTestData(data string) {
+	lineScanner = bufio.NewScanner(strings.NewReader(data))
+	wordScanner = bufio.NewScanner(strings.NewReader(""))
+	wordScanner.Split(bufio.ScanWords)
+}
+func VerifyTestData(expectedResult string, actualResult []string) (string, error) {
+	actual := ""
+	for i, res := range actualResult {
+		actual += fmt.Sprintf("Case #%d: %s\n", i+1, res)
+	}
+	diff := difflib.UnifiedDiff{
+		A:        difflib.SplitLines(expectedResult),
+		B:        difflib.SplitLines(actual),
+		FromFile: "Expected",
+		ToFile:   "Actual",
+		Context:  0,
+		Eol:      "\n",
+	}
+	return difflib.GetUnifiedDiffString(diff)
+}
+
 func SetName(name string) {
-	outputFile, err := os.Create(name)
+	outputFile, err := os.Create(name + ".out")
 	if err != nil {
 		panic(err)
 	}
 	writer = bufio.NewWriter(outputFile)
+	inputFile, err := os.Open(name + ".in")
+	if err != nil {
+		panic(err)
+	}
+	lineScanner = bufio.NewScanner(inputFile)
+	wordScanner = bufio.NewScanner(strings.NewReader(""))
+	wordScanner.Split(bufio.ScanWords)
 }
 
 func NextLine() (string, error) {

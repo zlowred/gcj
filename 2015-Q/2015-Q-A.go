@@ -1,3 +1,4 @@
+//+build ignore
 package main
 
 import (
@@ -24,13 +25,11 @@ func solve(ch chan gcj.Result, t *test) {
 	ch <- gcj.Result{t.num, fmt.Sprintf("%d", missing)}
 }
 
-func main() {
-	gcj.SetName("2015-Q-A-test")
+func runSolution() []string {
 	T := gcj.NextInt()
 	results := make([]string, T)
 	defer gcj.Close(results)
 	ch := make(chan gcj.Result, T)
-	defer close(ch)
 	for i := 0; i < T; i++ {
 		smax := gcj.NextInt()
 		ss := []rune(gcj.NextWord())
@@ -43,5 +42,30 @@ func main() {
 	for i := 0; i < T; i++ {
 		x := <-ch
 		results[x.Num] = x.Res
+	}
+	return results
+}
+
+const testData = `4
+4 11111
+1 09
+5 110011
+0 1
+`
+const expectedResult = `Case #1: 0
+Case #2: 1
+Case #3: 2
+Case #4: 0
+`
+const testName = "2015-Q-A"
+
+func main() {
+	//gcj.SetName(testName)
+	gcj.SetTestData(testData)
+	results := runSolution()
+	if diff, err := gcj.VerifyTestData(expectedResult, results); err != nil {
+		panic(err)
+	} else if len(diff) > 0 {
+		panic("\n" + diff)
 	}
 }
