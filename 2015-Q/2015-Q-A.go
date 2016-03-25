@@ -25,6 +25,7 @@ func solve(ch chan gcj.Result, t *test) {
 	}
 	time.Sleep(time.Second * 5)
 	ch <- gcj.Result{t.num, fmt.Sprintf("%d", missing)}
+	fmt.Printf("Case #%d is completed\n", t.num+1)
 }
 
 func runSolution() []string {
@@ -72,6 +73,8 @@ func verify(results []string) {
 }
 
 func main() {
+	start := time.Now()
+	defer fmt.Printf("Processing took %v\n", time.Now().Sub(start))
 	if example {
 		gcj.SetTestData(testData)
 	} else {
