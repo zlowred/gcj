@@ -28,9 +28,10 @@ var wordScanner *bufio.Scanner
 var writer *bufio.Writer
 
 func Printf(format string, a ...interface{}) {
-	fmt.Printf(format, a...)
 	if writer != nil {
 		fmt.Fprintf(writer, format, a...)
+	} else {
+		fmt.Printf(format, a...)
 	}
 }
 func Close(results []string) {

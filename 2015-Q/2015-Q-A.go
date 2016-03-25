@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/zlowred/gcj"
 	"strconv"
+	"time"
 )
 
 type test struct {
@@ -22,6 +23,7 @@ func solve(ch chan gcj.Result, t *test) {
 		}
 		total += x
 	}
+	time.Sleep(time.Second * 5)
 	ch <- gcj.Result{t.num, fmt.Sprintf("%d", missing)}
 }
 
@@ -59,6 +61,8 @@ Case #4: 0
 `
 const testName = "2015-Q-A"
 
+const example = false
+
 func verify(results []string) {
 	if diff, err := gcj.VerifyTestData(expectedResult, results); err != nil {
 		panic(err)
@@ -68,9 +72,13 @@ func verify(results []string) {
 }
 
 func main() {
-	//gcj.SetName(testName)
-	gcj.SetTestData(testData)
+	if example {
+		gcj.SetTestData(testData)
+	} else {
+		gcj.SetName(testName)
+	}
 	results := runSolution()
-	_ = results
-	verify(results)
+	if example {
+		verify(results)
+	}
 }
