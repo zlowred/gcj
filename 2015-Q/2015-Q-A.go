@@ -59,13 +59,18 @@ Case #4: 0
 `
 const testName = "2015-Q-A"
 
-func main() {
-	//gcj.SetName(testName)
-	gcj.SetTestData(testData)
-	results := runSolution()
+func verify(results []string) {
 	if diff, err := gcj.VerifyTestData(expectedResult, results); err != nil {
 		panic(err)
 	} else if len(diff) > 0 {
 		panic("\n" + diff)
 	}
+}
+
+func main() {
+	//gcj.SetName(testName)
+	gcj.SetTestData(testData)
+	results := runSolution()
+	_ = results
+	verify(results)
 }
