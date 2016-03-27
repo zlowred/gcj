@@ -24,8 +24,12 @@ func init() {
 
 var lineScanner *bufio.Scanner
 var wordScanner *bufio.Scanner
-
 var writer *bufio.Writer
+var separator = " "
+
+func SetSeparator(s string) {
+	separator = s
+}
 
 func Printf(format string, a ...interface{}) {
 	if writer != nil {
@@ -36,7 +40,7 @@ func Printf(format string, a ...interface{}) {
 }
 func Close(results []string) {
 	for i, res := range results {
-		Printf("Case #%d: %s\n", i+1, res)
+		Printf("Case #%d:%s%s\n", i+1, separator, res)
 	}
 
 	if writer != nil {
@@ -52,7 +56,7 @@ func SetTestData(data string) {
 func VerifyTestData(expectedResult string, actualResult []string) (string, error) {
 	actual := ""
 	for i, res := range actualResult {
-		actual += fmt.Sprintf("Case #%d: %s\n", i+1, res)
+		actual += fmt.Sprintf("Case #%d:%s%s\n", i+1, separator, res)
 	}
 	diff := difflib.UnifiedDiff{
 		A:        difflib.SplitLines(expectedResult),

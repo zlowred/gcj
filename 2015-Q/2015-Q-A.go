@@ -3,9 +3,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/zlowred/gcj"
 	"strconv"
 	"time"
+
+	"github.com/pivotal-golang/bytefmt"
+	"github.com/zlowred/gcj"
+	"runtime"
 )
 
 type test struct {
@@ -74,7 +77,12 @@ func verify(results []string) {
 
 func main() {
 	start := time.Now()
-	defer fmt.Printf("Processing took %v\n", time.Now().Sub(start))
+	defer func(t time.Time) {
+		fmt.Printf("Processing took %v\n", time.Now().Sub(t))
+		var mem runtime.MemStats
+		runtime.ReadMemStats(&mem)
+		fmt.Printf("Memory usage: %s\n", bytefmt.ByteSize(mem.Alloc))
+	}(start)
 	if example {
 		gcj.SetTestData(testData)
 	} else {
